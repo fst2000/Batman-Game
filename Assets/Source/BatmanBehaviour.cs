@@ -9,16 +9,12 @@ public class BatmanBehaviour : MonoBehaviour
     {
         batman = new Batman(gameObject);
     }
-    private void Update()
+    private void FixedUpdate()
     {
-        //batman.Update();
+        batman.Update();
     }
     private void OnDrawGizmos()
     {
         batman.OnDrawGizmos();
-    }
-    private void FixedUpdate()
-    {
-        batman.Update();
     }
 }

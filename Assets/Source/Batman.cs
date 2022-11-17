@@ -10,10 +10,10 @@ public class Batman
     [SerializeField] float wingRotationAngle = 20f;
     [SerializeField] Vector3 centerOfMass = new Vector3(0, 1.1f, .2f);
     PlayerInput playerInput;
-    Rigidbody rigidbody;
-    
+    Rigidbody rigidbody;    
     Animator animator;
     Transform transform;
+
     Wing[] wings;
     Wing wingL;
     Wing wingR;
@@ -38,11 +38,16 @@ public class Batman
     }
     public void Update()
     {
-        //Move(Input.GetKey("left shift")? runSpeed : walkSpeed);
-        Fly();
+        
+        if (Physics.CheckSphere(transform.position, 0.6f))
+        {
+            Move(Input.GetKey("left shift") ? runSpeed : walkSpeed);
+        }
+        else Fly();
     }
     void Move(float moveSpeed)
     {
+        rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         bool isMoving = playerInput.WalkInput != Vector3.zero;
         Vector3 velocity = rigidbody.velocity;
         Vector3 moveVelocity = new Vector3(playerInput.WalkInput.x * moveSpeed, velocity.y, playerInput.WalkInput.z * moveSpeed);
@@ -51,11 +56,14 @@ public class Batman
         {
             transform.rotation = Quaternion.LookRotation(playerInput.WalkInput, Vector3.up);
         }
+        animator.SetBool("isFlying", false);
         animator.SetBool("isMoving", isMoving);
         animator.SetFloat("moveSpeedBlend", moveSpeed);
     }
     void Fly()
     {
+        rigidbody.constraints = RigidbodyConstraints.None;
+        animator.SetBool("isMoving", false);
         animator.SetBool("isFlying", true);
         animator.SetFloat("flyBlend", -playerInput.MoveVertical);
         rigidbody.AddRelativeTorque(0, 0, 60 * -playerInput.MoveHorizontal);
@@ -69,6 +77,7 @@ public class Batman
             Vector3 globalVelocity = rigidbody.GetPointVelocity(wingGlobalPosition);
             rigidbody.AddForceAtPosition(globalNormal * Vector3.Dot(globalNormal, -globalVelocity) * wing.GetSquare() * globalVelocity.magnitude, wingGlobalPosition);
         }
+
     }
     public void OnDrawGizmos()
     {
