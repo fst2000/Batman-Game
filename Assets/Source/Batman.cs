@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -10,6 +11,7 @@ public class Batman
     [SerializeField] float runSpeed = 5f;
     [SerializeField] float wingRotationAngle = 20f;
     [SerializeField] Vector3 centerOfMass = new Vector3(0, 1f, 0.2f);
+    [SerializeField] Transform[] rotatedBones = new Transform[5];
     PlayerInput playerInput;
     Rigidbody rigidbody;    
     Animator animator;
@@ -21,7 +23,7 @@ public class Batman
     Wing wingR;
     Wing wingBack;
     Wing wingStabilize;
-    public Batman(GameObject gameObject)
+    public void Initialize(GameObject gameObject)
     {
         animator = gameObject.GetComponent<Animator>();
         playerInput = new PlayerInput();
@@ -29,13 +31,13 @@ public class Batman
         rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
         rigidbody.mass = 90f;
         rigidbody.centerOfMass = centerOfMass;
-        rigidbody.angularDrag = 0.5f;
+        rigidbody.angularDrag = 2f;
         transform = gameObject.transform;
 
         wingL = new Wing(Vector3.ClampMagnitude(new Vector3(1, -1, -10), 1), new Vector3(-1f,1,0), 2f,1f);
         wingR = new Wing(Vector3.ClampMagnitude(new Vector3(-1, -1, -10), 1), new Vector3(1f,1,0), 2f,1f);
         wingBack = new Wing(Vector3.back, Vector3.zero, 1f, 0.5f);
-        wingStabilize = new Wing(Vector3.right, new Vector3(0,0,0.5f), .25f, .5f);
+        wingStabilize = new Wing(Vector3.right, new Vector3(0,0,0.2f), .25f, .5f);
         wings = new Wing[] {wingL,wingR, wingBack ,wingStabilize};
     }
     public void Update()
@@ -84,6 +86,15 @@ public class Batman
             Vector3 wingGlobalPosition = transform.TransformPoint(wing.GetLocalPosition());
             Vector3 globalVelocity = rigidbody.GetPointVelocity(wingGlobalPosition);
             rigidbody.AddForceAtPosition(globalNormal * Vector3.Dot(globalNormal, -globalVelocity) * wing.GetSquare() * globalVelocity.magnitude, wingGlobalPosition);
+        }
+    }
+    public void CloakSimulation()
+    {
+        foreach (Transform bone in rotatedBones)
+        {
+            Quaternion localRotation = bone.localRotation;
+            float rotateAngle = 0.5f - Mathf.PerlinNoise(Time.time * 10f,0);
+            bone.localRotation = Quaternion.Euler(new Vector3(0, 0, rotateAngle * Mathf.Clamp(rigidbody.velocity.magnitude * 0.2f, 0, 15))) * localRotation;
         }
     }
     public void OnDrawGizmos()

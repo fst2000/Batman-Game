@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &160691463 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4867785477666917583, guid: 6ce03b1b15d19e54f873982cb4b33177, type: 3}
+  m_PrefabInstance: {fileID: 1593887338}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &934869228 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6e19b4a38fc4fd143866a2861c1e558c, type: 3}
@@ -244,6 +249,11 @@ MonoBehaviour:
   cameraHeight: 1.3
   cameraDistance: -3
   cameraSpeed: 2
+--- !u!4 &1259212079 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4868564530949869692, guid: 6ce03b1b15d19e54f873982cb4b33177, type: 3}
+  m_PrefabInstance: {fileID: 1593887338}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1570419639 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6ce03b1b15d19e54f873982cb4b33177, type: 3}
@@ -281,10 +291,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   batman:
-    walkSpeed: 0
-    runSpeed: 0
-    wingRotationAngle: 0
-    centerOfMass: {x: 0, y: 0, z: 0}
+    walkSpeed: 2.5
+    runSpeed: 5
+    wingRotationAngle: 20
+    centerOfMass: {x: 0, y: 1, z: 0}
+    rotatedBones:
+    - {fileID: 1893748713}
+    - {fileID: 160691463}
+    - {fileID: 1259212079}
+    - {fileID: 1826069193}
+    - {fileID: 1589762754}
 --- !u!1001 &1572961425
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -358,6 +374,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6e19b4a38fc4fd143866a2861c1e558c, type: 3}
+--- !u!4 &1589762754 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -1410007656973951739, guid: 6ce03b1b15d19e54f873982cb4b33177, type: 3}
+  m_PrefabInstance: {fileID: 1593887338}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1593887338
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -616,6 +637,16 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7462862299206254262, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
   m_PrefabInstance: {fileID: 7462862300720108527}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1826069193 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5006627341215678307, guid: 6ce03b1b15d19e54f873982cb4b33177, type: 3}
+  m_PrefabInstance: {fileID: 1593887338}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1893748713 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -847657737555798529, guid: 6ce03b1b15d19e54f873982cb4b33177, type: 3}
+  m_PrefabInstance: {fileID: 1593887338}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7462862300720108527
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -628,12 +659,28 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
+      propertyPath: ShapeModule.type
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
       propertyPath: TrailModule.mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
+      propertyPath: ShapeModule.m_Mesh
+      value: 
+      objectReference: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+    - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
+      propertyPath: TriggerModule.exit
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
       propertyPath: TrailModule.enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
+      propertyPath: TriggerModule.inside
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
       propertyPath: ShapeModule.m_Scale.x
@@ -648,6 +695,14 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
+      propertyPath: TriggerModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
+      propertyPath: TriggerModule.outside
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
       propertyPath: TrailModule.worldSpace
       value: 0
       objectReference: {fileID: 0}
@@ -656,12 +711,28 @@ PrefabInstance:
       value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
+      propertyPath: CustomDataModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
+      propertyPath: ShapeModule.placementMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
       propertyPath: VelocityModule.y.minScalar
       value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
       propertyPath: TrailModule.lifetime.scalar
       value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
+      propertyPath: ShapeModule.alignToDirection
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
       propertyPath: InitialModule.maxNumParticles
@@ -674,6 +745,14 @@ PrefabInstance:
     - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
       propertyPath: InitialModule.startSize.scalar
       value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
+      propertyPath: TriggerModule.colliderQueryMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
+      propertyPath: ShapeModule.randomPositionAmount
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
       propertyPath: InitialModule.startSize.minScalar
@@ -690,6 +769,10 @@ PrefabInstance:
     - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
+      propertyPath: TriggerModule.primitives.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
       propertyPath: TrailModule.colorOverTrail.minMaxState
@@ -721,6 +804,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7462862299206254260, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
       propertyPath: TrailModule.colorOverTrail.maxGradient.key1.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7462862299206254261, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
+      propertyPath: m_MaxParticleSize
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 7462862299206254261, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
+      propertyPath: m_MinParticleSize
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7462862299206254261, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
@@ -781,7 +872,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7462862299206254263, guid: 59058abcc48018248b7b4a0882872f34, type: 3}
       propertyPath: m_Name
-      value: Snow Falling
+      value: Snow Particle
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59058abcc48018248b7b4a0882872f34, type: 3}

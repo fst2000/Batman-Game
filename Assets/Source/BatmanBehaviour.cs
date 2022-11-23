@@ -7,11 +7,15 @@ public class BatmanBehaviour : MonoBehaviour
     [SerializeField] Batman batman;
     private void Start()
     {
-        batman = new Batman(gameObject);
+        batman.Initialize(gameObject);
     }
     private void FixedUpdate()
     {
         batman.Update();
+    }
+    private void LateUpdate()
+    {
+        batman.CloakSimulation();
     }
     private void OnDrawGizmos()
     {
