@@ -9,9 +9,13 @@ public class BatmanBehaviour : MonoBehaviour
     {
         batman.Initialize(gameObject);
     }
-    private void FixedUpdate()
+    private void Update()
     {
         batman.Update();
+    }
+    private void FixedUpdate()
+    {
+        batman.FixedUpdate();
     }
     private void LateUpdate()
     {

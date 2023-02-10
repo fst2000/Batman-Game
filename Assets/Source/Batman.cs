@@ -7,8 +7,8 @@ using UnityEngine;
 [System.Serializable]
 public class Batman
 {
-    [SerializeField] float walkSpeed = 2.5f;
-    [SerializeField] float runSpeed = 5f;
+    [SerializeField] public float WalkSpeed{get;} = 2.5f;
+    [SerializeField] public float RunSpeed{get;} = 5f;
     [SerializeField] float wingRotationAngle = 20f;
     [SerializeField] Vector3 centerOfMass = new Vector3(0, 1f, 0.2f);
     [SerializeField] Transform[] rotatedBones = new Transform[5];
@@ -16,7 +16,7 @@ public class Batman
     Rigidbody rigidbody;    
     Animator animator;
     Transform transform;
-    bool isFlyingStarted;
+    IState state;
 
     Wing[] wings;
     Wing wingL;
@@ -33,6 +33,7 @@ public class Batman
         rigidbody.centerOfMass = centerOfMass;
         rigidbody.angularDrag = 2f;
         transform = gameObject.transform;
+        state = new WalkState(this);
 
         wingL = new Wing(Vector3.ClampMagnitude(new Vector3(1, -1, -10), 1), new Vector3(-1f,1,0), 2f,1f);
         wingR = new Wing(Vector3.ClampMagnitude(new Vector3(-1, -1, -10), 1), new Vector3(1f,1,0), 2f,1f);
@@ -42,39 +43,45 @@ public class Batman
     }
     public void Update()
     {
-        
-        if (Physics.CheckSphere(transform.position, 0.6f))
+        state.OnUpdate();
+        if(state != state.NextState())
         {
-            Move(Input.GetKey("left shift") ? runSpeed : walkSpeed);
+            state.OnExit();
+            state = state.NextState();
+            state.OnEnter();
         }
-        else Fly();
     }
-    void Move(float moveSpeed)
+    public void FixedUpdate()
     {
-        isFlyingStarted = true;
+        state.OnFixedUpdate();
+    }
+    public bool IsOnGround()
+    {
+        return Physics.CheckCapsule(transform.position,transform.position + transform.rotation * new Vector3(0, 1.8f, 0),0.6f);
+    }
+    public void MoveOnEnter()
+    {
+        rigidbody.velocity = Vector3.zero;
+        transform.rotation = Quaternion.LookRotation(Vector3.up);
+        animator.CrossFade("MoveBlend", 0);
+    }
+    public void Move(float moveSpeed)
+    {
         rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-        bool isMoving = playerInput.WalkInput != Vector3.zero;
         Vector3 velocity = rigidbody.velocity;
-        Vector3 moveVelocity = new Vector3(playerInput.WalkInput.x * moveSpeed, velocity.y, playerInput.WalkInput.z * moveSpeed);
-        rigidbody.velocity = moveVelocity;
-        if (isMoving)
-        {
-            transform.rotation = Quaternion.LookRotation(playerInput.WalkInput, Vector3.up);
-        }
-        animator.SetBool("isFlying", false);
-        animator.SetBool("isMoving", isMoving);
-        animator.SetFloat("moveSpeedBlend", moveSpeed);
+        Vector3 moveVelocity = playerInput.WalkInput * moveSpeed;
+        rigidbody.velocity = moveVelocity + new Vector3(0, velocity.y, 0);
+        transform.rotation = Quaternion.LookRotation(playerInput.WalkInput,Vector3.up);
     }
-    void Fly()
+    public void FlyOnEnter()
     {
-        if (isFlyingStarted)
-        {
-            transform.rotation = transform.rotation * Quaternion.Euler(100, 0, 0);
-        }
-        isFlyingStarted = false;
+        rigidbody.AddForce(transform.forward * RunSpeed, ForceMode.VelocityChange);
+        transform.rotation = Quaternion.Euler(90,0,0) * transform.rotation;
+        animator.CrossFade("FlyBlend", 0);
+    }
+    public void Fly()
+    {
         rigidbody.constraints = RigidbodyConstraints.None;
-        animator.SetBool("isMoving", false);
-        animator.SetBool("isFlying", true);
         animator.SetFloat("flyBlend", -playerInput.MoveVertical);
         rigidbody.AddRelativeTorque(0, 0, rigidbody.velocity.magnitude * 2f * -playerInput.MoveHorizontal);
         wingBack.UpdateRotation(new Vector3(-playerInput.MoveVertical * wingRotationAngle, 0, 0));
@@ -88,12 +95,13 @@ public class Batman
             rigidbody.AddForceAtPosition(globalNormal * Vector3.Dot(globalNormal, -globalVelocity) * wing.GetSquare() * globalVelocity.magnitude, wingGlobalPosition);
         }
     }
+    
     public void CloakSimulation()
     {
         foreach (Transform bone in rotatedBones)
         {
             Quaternion localRotation = bone.localRotation;
-            float rotateAngle = 0.5f - Mathf.PerlinNoise(Time.time * 10f,0);
+            float rotateAngle = 0.5f - Mathf.PerlinNoise(Time.time * 10f,Vector3.Dot(transform.up,bone.transform.up));
             bone.localRotation = Quaternion.Euler(new Vector3(0, 0, rotateAngle * Mathf.Clamp(rigidbody.velocity.magnitude * 0.2f, 0, 15))) * localRotation;
         }
     }
